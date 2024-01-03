@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class CategoryController {
+    @Autowired
     private CategoryService categoryService;
 
     @PostMapping("")
@@ -63,8 +65,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "When server error"),
             @ApiResponse(responseCode = "401", description = "User is not authenticated")
     })
-    private ResponseEntity<Category> getCategory (@PathVariable Long CategoryId) {
-        Optional<Category> category = categoryService.getCategory(CategoryId);
+    private ResponseEntity<Category> getCategory (@PathVariable Long categoryId) {
+        Optional<Category> category = categoryService.getCategory(categoryId);
 
         if (category.isPresent()) {
             return new ResponseEntity<>(category.get(), HttpStatus.OK);
@@ -82,8 +84,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "When server error"),
             @ApiResponse(responseCode = "401", description = "User is not authenticated")
     })
-    private ResponseEntity<Category> updateCategory (@RequestBody @Valid CategoryRequest categoryRequest, @PathVariable Long CategoryId) {
-        return new ResponseEntity<>(categoryService.updateCategory(categoryRequest, CategoryId), HttpStatus.OK);
+    private ResponseEntity<Category> updateCategory (@RequestBody @Valid CategoryRequest categoryRequest, @PathVariable Long categoryId) {
+        return new ResponseEntity<>(categoryService.updateCategory(categoryRequest, categoryId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{categoryId}")
@@ -94,8 +96,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "When server error"),
             @ApiResponse(responseCode = "401", description = "User is not authenticated")
     })
-    private ResponseEntity<Void> deleteCategory (@PathVariable Long CategoryId) {
-        categoryService.deleteCategory(CategoryId);
+    private ResponseEntity<Void> deleteCategory (@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
