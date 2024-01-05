@@ -26,10 +26,19 @@ public class ProductService {
     private ProductRepository productRepository;
 
 
-    public Product saveProduct(ProductRequest productRequest){
-        Product product = Product.builder().name(productRequest.getName()).build();
+    public Product saveProduct(ProductRequest productRequest) {
+        Product product = Product.builder()
+                .name(productRequest.getName())
+                .image(productRequest.getImage())
+                .normalIroning(productRequest.getNormalIroning())  // Utilisation du nom de variable correct
+                .fastIroning(productRequest.getFastIroning())
+                .fastDetergent(productRequest.getFastDetergent())
+                .normalGloriousPressing(productRequest.getNormalGloriousPressing())
+                .build();
+
         return productRepository.save(product);
     }
+
 
     public Optional<Product> getProduct(Long productId) {
         return productRepository.findById(productId);

@@ -22,10 +22,24 @@ public class SaleService {
 
     private SaleRepository saleRepository;
 
-    public Sale saveSale(SaleRequest saleRequest){
-        Sale sale = Sale.builder().num(saleRequest.getNum()).build();
+    public Sale saveSale(SaleRequest saleRequest) {
+        // Utilisation des noms de variables en minuscules conformément aux conventions de codage Java
+        Sale sale = Sale.builder()
+                .num(saleRequest.getNum())
+                .customer(saleRequest.getCustomer())
+                .tax(saleRequest.getTax())
+                .discount(saleRequest.getDiscount())
+                .near(saleRequest.getNear())
+                .numberService(saleRequest.getNumberService())
+                .status(saleRequest.getStatus())
+                .isDelivered(saleRequest.getDelivered())  // Utilisation du nom de méthode correct
+                .build();
+
+        // Enregistrement de l'objet Sale créé dans le repository
         return saleRepository.save(sale);
     }
+
+
 
     public Optional<Sale> getSale(Long saleId) {
         return saleRepository.findById(saleId);

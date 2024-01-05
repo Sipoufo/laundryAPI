@@ -22,8 +22,15 @@ public class ExpenseService {
 
     private ExpenseRepository expenseRepository;
 
-    public Expense saveExpense(ExpenseRequest expenseRequest){
-        Expense expense = Expense.builder().num(expenseRequest.getNum()).build();
+    public Expense saveExpense(ExpenseRequest expenseRequest) {
+        Expense expense = Expense.builder()
+                .num(expenseRequest.getNum())
+                .price(expenseRequest.getPrice())
+                .isDelivered(expenseRequest.isDelivered())  // Utilisation du getter isDelivered()
+                .category(expenseRequest.getCategory())
+                .title(expenseRequest.getTitle())
+                .build();
+
         return expenseRepository.save(expense);
     }
 

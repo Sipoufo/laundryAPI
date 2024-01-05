@@ -1,6 +1,7 @@
 package com.STTFV.laundryAPI.dto.requests;
 
 
+import com.STTFV.laundryAPI.entities.Image;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,4 +20,15 @@ public class ProductRequest {
     @NotNull(message = "Invalid product productId: Name is NULL")
 
     public String Name;
+
+    public Image Image;
+
+    public int normalIroning;
+
+    public int fastIroning;
+
+    public int getnormalIroning;
+    public int normalGloriousPressing;
+
+    public int fastDetergent;
 }

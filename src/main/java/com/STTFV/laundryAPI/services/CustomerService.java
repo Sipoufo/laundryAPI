@@ -22,7 +22,16 @@ public class CustomerService {
         private CustomerRepository customerRepository;
 
         public  Customer  saveCustomer(CustomerRequest customerRequest){
-        Customer customer = Customer.builder().phone(customerRequest.getPhone()).build();
+        Customer customer = Customer.builder()
+                .phone(customerRequest.getPhone())
+                .num(customerRequest.getNum())
+                .address(customerRequest.getAddress())
+                .firstName(customerRequest.getFirstname())
+                .lastName(customerRequest.getLastname())
+                .remains(customerRequest.getRemains())
+                .transaction(customerRequest.getTransaction())
+                .paid(customerRequest.getPaid())
+                .build();
         return customerRepository.save(customer);
         }
 

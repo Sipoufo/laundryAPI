@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Setter
 @Getter
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"num", "phone"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"num", "phone"}),schema = "public")
 public class Customer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,12 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private int transaction;
+
+    @Column(nullable = false)
     private int paid;
+
+    @Column(nullable = false)
     private int remains;
 }
