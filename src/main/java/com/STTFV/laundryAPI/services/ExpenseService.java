@@ -3,6 +3,7 @@ package com.STTFV.laundryAPI.services;
 
 import com.STTFV.laundryAPI.dto.requests.CustomerRequest;
 import com.STTFV.laundryAPI.dto.requests.ExpenseRequest;
+import com.STTFV.laundryAPI.entities.Category;
 import com.STTFV.laundryAPI.entities.Expense;
 import com.STTFV.laundryAPI.exceptions.ResourceNotFoundException;
 import com.STTFV.laundryAPI.repositories.ExpenseRepository;
@@ -19,15 +20,20 @@ import java.util.Optional;
 public class ExpenseService {
 
     @Autowired
-
     private ExpenseRepository expenseRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     public Expense saveExpense(ExpenseRequest expenseRequest) {
+        Optional<Category> category = categoryService.getCategory(expenseRequest.getCategoryId());
+        if (category.isEmpty()) {
+            throw new ResourceNotFoundException("Category not found");
+        }
+
         Expense expense = Expense.builder()
-                .num(expenseRequest.getNum())
                 .price(expenseRequest.getPrice())
                 .isDelivered(expenseRequest.isDelivered())  // Utilisation du getter isDelivered()
-                .category(expenseRequest.getCategory())
+                .category(category.get())
                 .title(expenseRequest.getTitle())
                 .build();
 
@@ -44,12 +50,19 @@ public class ExpenseService {
 
     public  Expense updateExpense(ExpenseRequest expenseRequest, Long expenseId) {
         Optional<Expense> expense = expenseRepository.findById(expenseId);
-
         if (expense.isEmpty()) {
             throw new ResourceNotFoundException("Expense not found.");
         }
 
-        expense.get().setNum(expenseRequest.getNum());
+        Optional<Category> category = categoryService.getCategory(expenseRequest.getCategoryId());
+        if (category.isEmpty()) {
+            throw new ResourceNotFoundException("Category not found");
+        }
+
+        expense.get().setTitle(expenseRequest.getTitle());
+        expense.get().setPrice(expenseRequest.getPrice());
+        expense.get().setDelivered(expenseRequest.isDelivered());
+        expense.get().setCategory(category.get());
 
         return expenseRepository.save(expense.get());
     }

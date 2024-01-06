@@ -28,10 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/expense")
 public class ExpenseController {
-
-
     @Autowired
-
     private ExpenseService expenseService;
 
     @PostMapping("")

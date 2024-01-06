@@ -18,9 +18,7 @@ public class ProductRequest {
 
     @NotBlank(message = "Product ProductId must not be blank")
     @NotNull(message = "Invalid product productId: Name is NULL")
-
     public String Name;
-
     public Image Image;
 
     public int normalIroning;

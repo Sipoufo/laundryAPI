@@ -18,9 +18,6 @@ public class Expense extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long expenseId;
 
-    @Column(unique = true, nullable = false)
-    private String num;
-
     @Column(nullable = false)
     private String title;
 
@@ -32,5 +29,5 @@ public class Expense extends BaseEntity {
     private int price;
 
     @Column(nullable = false)
-    private boolean isDelivered;
+    private boolean isDelivered = false;
 }

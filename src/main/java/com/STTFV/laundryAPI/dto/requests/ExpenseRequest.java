@@ -13,18 +13,18 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class ExpenseRequest {
+    @NotBlank(message = "Price must not be blank")
+    @NotNull(message = "Invalid price value: Price is NULL")
+    private int price;
 
-    @NotBlank(message = "Expense num must not be blank")
-    @NotNull(message = "Invalid expense num: Num is NULL")
-    private String num;
+    @NotNull(message = "Invalid deliver value: Price is NULL")
+    private boolean isDelivered;
 
-    private int price;  // Utilisation de camelCase pour les noms de variables
+    @NotBlank(message = "Category must not be blank")
+    @NotNull(message = "Invalid category value: Price is NULL")
+    private Long categoryId;
 
-    private boolean isDelivered;  // Utilisation de camelCase
-
-    private Category category;  // Utilisation de camelCase
-
-    public String Title;
-
-    // Suppression de la méthode inutile getIsDelivered()
+    @NotBlank(message = "Title must not be blank")
+    @NotNull(message = "Invalid title value: Price is NULL")
+    public String title;
 }
