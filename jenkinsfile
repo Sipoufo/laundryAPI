@@ -12,7 +12,7 @@ node {
         stage('Deploy docker'){
               echo "Docker Image Tag Name: ${dockerImageTag}"
               sh "docker stop laundryapi-deploy || true && docker rm laundryapi-deploy || true"
-              sh "docker run --net=host --name laundryapi-deploy -d -p 8080:8080 laundryapi-deploy:${env.BUILD_NUMBER}"
+              sh "docker run --net=host --name laundryapi-deploy -d -p 8086:8086 laundryapi-deploy:${env.BUILD_NUMBER}"
         }
     }catch(e){
         throw e
