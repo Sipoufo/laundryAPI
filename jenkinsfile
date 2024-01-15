@@ -1,0 +1,20 @@
+node {
+    def WORKSPACE = "/var/lib/jenkins/workspace/laundryapi"
+    def dockerImageTag = "laundryapi-deploy${env.BUILD_NUMBER}"
+    try{
+        stage('Clone Repo') {
+            git url: 'https://github.com/Sipoufo/laundryAPI.git',
+                branch: 'main'
+         }
+        stage('Build docker') {
+             dockerImage = docker.build("laundryapi-deploy:${env.BUILD_NUMBER}")
+        }
+        stage('Deploy docker'){
+              echo "Docker Image Tag Name: ${dockerImageTag}"
+              sh "docker stop laundryapi-deploy || true && docker rm laundryapi-deploy || true"
+              sh "docker run --net=host --name laundryapi-deploy -d -p 8080:8080 laundryapi-deploy:${env.BUILD_NUMBER}"
+        }
+    }catch(e){
+        throw e
+    }
+}
