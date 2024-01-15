@@ -17,6 +17,10 @@ public class SignUpRequest {
     @Email(message = "Please provide a valid email address")
     private String email;
 
+    @UniqueEmail
+    @NotBlank(message = "Phone must not be blank")
+    private String phone;
+
     @NotBlank(message = "Name must not be blank")
     @NotNull(message = "Invalid Name: Name is NULL")
     @Size(min = 3, message = "Name must be at least 3 characters long")

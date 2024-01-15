@@ -29,7 +29,6 @@ public class SaleService {
                 .customer(saleRequest.getCustomer())
                 .tax(saleRequest.getTax())
                 .discount(saleRequest.getDiscount())
-                .near(saleRequest.getNear())
                 .numberService(saleRequest.getNumberService())
                 .status(saleRequest.getStatus())
                 .isDelivered(saleRequest.getDelivered())  // Utilisation du nom de méthode correct

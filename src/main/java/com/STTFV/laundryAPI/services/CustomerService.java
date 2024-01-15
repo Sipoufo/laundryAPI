@@ -8,6 +8,7 @@ import com.STTFV.laundryAPI.exceptions.ResourceNotFoundException;
 import com.STTFV.laundryAPI.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +25,9 @@ public class CustomerService {
         public  Customer  saveCustomer(CustomerRequest customerRequest){
         Customer customer = Customer.builder()
                 .phone(customerRequest.getPhone())
-                .num(customerRequest.getNum())
                 .address(customerRequest.getAddress())
                 .firstName(customerRequest.getFirstname())
                 .lastName(customerRequest.getLastname())
-                .remains(customerRequest.getRemains())
-                .transaction(customerRequest.getTransaction())
-                .paid(customerRequest.getPaid())
                 .build();
         return customerRepository.save(customer);
         }
@@ -40,8 +37,8 @@ public class CustomerService {
         return customerRepository.findById(customerId);
         }
 
-    public List<Customer> getAllCustomer() {
-        return customerRepository.findAll();
+    public List<Customer> getAllCustomer(Pageable pageable) {
+        return customerRepository.findAll(pageable).getContent();
     }
 
     public  Customer updateCustomer(CustomerRequest customerRequest, Long customerId) {
@@ -51,7 +48,10 @@ public class CustomerService {
             throw new ResourceNotFoundException("Customer not found.");
         }
 
+        customer.get().setAddress(customerRequest.getAddress());
         customer.get().setPhone(customerRequest.getPhone());
+        customer.get().setFirstName(customerRequest.getFirstname());
+        customer.get().setLastName(customerRequest.getLastname());
 
         return customerRepository.save(customer.get());
     }

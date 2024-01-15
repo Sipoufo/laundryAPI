@@ -2,6 +2,7 @@ package com.STTFV.laundryAPI.controllers;
 
 import com.STTFV.laundryAPI.dto.requests.ImageRequest;
 import com.STTFV.laundryAPI.dto.requests.ProductRequest;
+import com.STTFV.laundryAPI.dto.responses.DataResponse;
 import com.STTFV.laundryAPI.entities.Image;
 import com.STTFV.laundryAPI.entities.Product;
 import com.STTFV.laundryAPI.exceptions.ResourceNotFoundException;
@@ -14,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +31,6 @@ import java.util.Optional;
 @RequestMapping("api/v1/product")
 public class ProductController {
     @Autowired
-
     private ProductService productService;
 
     @PostMapping("")
@@ -44,7 +46,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("")
+    @GetMapping("/{pageNumber}/{pageSize}")
     @Operation(summary = "Get the list of products", tags = "Product")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Products fetched"),
@@ -53,14 +55,20 @@ public class ProductController {
             @ApiResponse(responseCode = "401", description = "User is not authenticated")
     })
 
-    private ResponseEntity<List<Product>> getProducts () {
-        List<Product> products = productService.getAllProduct();
+    private ResponseEntity<DataResponse> getProducts (@PathVariable("pageNumber") int pageNumber, @PathVariable("pageSize") int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        List<Product> products = productService.getAllProduct(pageable);
 
+        DataResponse productsResponse = DataResponse
+                .builder()
+                .data(products)
+                .pageable(pageable)
+                .build();
         if (products.isEmpty()) {
-            return new ResponseEntity<>(products, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(productsResponse, HttpStatus.NO_CONTENT);
         }
         else {
-            return new ResponseEntity<>(products, HttpStatus.OK);
+            return new ResponseEntity<>(productsResponse, HttpStatus.OK);
         }
     }
 

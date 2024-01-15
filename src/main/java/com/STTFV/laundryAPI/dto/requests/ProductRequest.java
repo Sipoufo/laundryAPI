@@ -14,19 +14,19 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class ProductRequest {
-
-
-    @NotBlank(message = "Product ProductId must not be blank")
-    @NotNull(message = "Invalid product productId: Name is NULL")
-    public String Name;
-    public Image Image;
-
-    public int normalIroning;
-
-    public int fastIroning;
-
-    public int getnormalIroning;
-    public int normalGloriousPressing;
-
-    public int fastDetergent;
+    @NotBlank(message = "Name must not be blank")
+    @NotNull(message = "Invalid price value: Name is NULL")
+    private String Name;
+    @NotNull(message = "Invalid price value: normalIroning is NULL")
+    private int normalIroning;
+    @NotNull(message = "Invalid price value: fastIroning is NULL")
+    private int fastIroning;
+    @NotNull(message = "Invalid price value: normalDetergent is NULL")
+    private int normalDetergent;
+    @NotNull(message = "Invalid price value: fastDetergent is NULL")
+    private int fastDetergent;
+    @NotNull(message = "Invalid price value: normalGloriousPressing is NULL")
+    private int normalGloriousPressing;
+    @NotNull(message = "Invalid price value: fastGloriousPressing is NULL")
+    private int fastGloriousPressing;
 }

@@ -33,6 +33,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true, nullable = false)
+    private String phone;
+
     @JsonIgnore
     private String password;
 

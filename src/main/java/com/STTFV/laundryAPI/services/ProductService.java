@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,11 +30,12 @@ public class ProductService {
     public Product saveProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.getName())
-                .image(productRequest.getImage())
                 .normalIroning(productRequest.getNormalIroning())  // Utilisation du nom de variable correct
                 .fastIroning(productRequest.getFastIroning())
+                .normalDetergent(productRequest.getNormalDetergent())
                 .fastDetergent(productRequest.getFastDetergent())
                 .normalGloriousPressing(productRequest.getNormalGloriousPressing())
+                .fastGloriousPressing(productRequest.getFastGloriousPressing())
                 .build();
 
         return productRepository.save(product);
@@ -44,18 +46,24 @@ public class ProductService {
         return productRepository.findById(productId);
     }
 
-    public List<Product> getAllProduct() {
-        return productRepository.findAll();
+    public List<Product> getAllProduct(Pageable pageable) {
+        return productRepository.findAll(pageable).getContent();
     }
 
     public  Product updateProduct(ProductRequest productRequest, Long productId) {
         Optional<Product> product = productRepository.findById(productId);
 
         if (product.isEmpty()) {
-            throw new ResourceNotFoundException("product not found.");
+            throw new ResourceNotFoundException("Product not found.");
         }
 
         product.get().setName(productRequest.getName());
+        product.get().setNormalIroning(productRequest.getNormalIroning());
+        product.get().setFastIroning(productRequest.getFastIroning());
+        product.get().setNormalDetergent(productRequest.getNormalDetergent());
+        product.get().setFastDetergent(productRequest.getFastDetergent());
+        product.get().setNormalGloriousPressing(productRequest.getNormalGloriousPressing());
+        product.get().setFastGloriousPressing(productRequest.getFastGloriousPressing());
 
         return productRepository.save(product.get());
     }

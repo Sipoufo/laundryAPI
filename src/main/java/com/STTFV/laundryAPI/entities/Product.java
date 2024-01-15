@@ -12,15 +12,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Setter
 @Getter
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "num"))
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id", referencedColumnName = "imageId")
-    private Image image;
 
     @Column(nullable = false)
     private String name;

@@ -1,11 +1,9 @@
 package com.STTFV.laundryAPI.controllers;
 
-import com.STTFV.laundryAPI.dto.requests.CategoryRequest;
 import com.STTFV.laundryAPI.dto.requests.CustomerRequest;
-import com.STTFV.laundryAPI.entities.Category;
+import com.STTFV.laundryAPI.dto.responses.DataResponse;
 import com.STTFV.laundryAPI.entities.Customer;
 import com.STTFV.laundryAPI.exceptions.ResourceNotFoundException;
-import com.STTFV.laundryAPI.repositories.CustomerRepository;
 import com.STTFV.laundryAPI.services.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/customer")
 public class CustomerController {
-
     @Autowired
 
     private CustomerService customerService;
@@ -45,7 +44,7 @@ public class CustomerController {
     }
 
 
-    @GetMapping("")
+    @GetMapping("/{pageNumber}/{pageSize}")
     @Operation(summary = "Get the list of customers", tags = "Customer")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Customers fetched"),
@@ -54,14 +53,21 @@ public class CustomerController {
             @ApiResponse(responseCode = "401", description = "User is not authenticated")
     })
 
-    private ResponseEntity<List<Customer>> getCustomers () {
-        List<Customer> customers = customerService.getAllCustomer();
+    private ResponseEntity<DataResponse> getCustomers (@PathVariable("pageNumber") int pageNumber, @PathVariable("pageSize") int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        List<Customer> customers = customerService.getAllCustomer(pageable);
+
+        DataResponse customersResponse = DataResponse
+                .builder()
+                .data(customers)
+                .pageable(pageable)
+                .build();
 
         if (customers.isEmpty()) {
-            return new ResponseEntity<>(customers, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(customersResponse, HttpStatus.NO_CONTENT);
         }
         else {
-            return new ResponseEntity<>(customers, HttpStatus.OK);
+            return new ResponseEntity<>(customersResponse, HttpStatus.OK);
         }
     }
 

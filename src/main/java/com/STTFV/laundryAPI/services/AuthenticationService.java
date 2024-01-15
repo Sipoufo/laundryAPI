@@ -39,7 +39,7 @@ public class AuthenticationService {
     private final PasswordTokenRepository passwordTokenRepository;
 
     public JwtAuthenticationResponse signUp(SignUpRequest request, UserMachineDetails userMachineDetails) {
-        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).password(passwordEncoder.encode(request.getPassword())).build();
+        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).password(passwordEncoder.encode(request.getPassword())).phone(request.getPhone()).build();
         user = userRepository.save(user);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());

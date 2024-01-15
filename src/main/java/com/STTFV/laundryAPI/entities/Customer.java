@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
@@ -12,14 +14,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Setter
 @Getter
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"num", "phone"}),schema = "public")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "phone"),schema = "public")
 public class Customer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id", nullable = false)
     private Long customerId;
-
-    @Column(unique = true, nullable = false)
-    private String num;
 
     @Column(nullable = false)
     private String firstName;
@@ -33,12 +33,6 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
-    private int transaction;
-
-    @Column(nullable = false)
-    private int paid;
-
-    @Column(nullable = false)
-    private int remains;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Sale> sales;
 }

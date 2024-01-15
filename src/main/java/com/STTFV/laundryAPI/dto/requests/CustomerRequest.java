@@ -12,12 +12,16 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class CustomerRequest {
-    private String num;
+    @NotBlank(message = "First name must not be blank")
+    @NotNull(message = "Invalid price value: first name is NULL")
     private String firstname;
+    @NotBlank(message = "Last name must not be blank")
+    @NotNull(message = "Invalid price value: last name is NULL")
     private String lastname;
+    @NotBlank(message = "Phone must not be blank")
+    @NotNull(message = "Invalid price value: phone is NULL")
     private String phone;
+    @NotBlank(message = "Address must not be blank")
+    @NotNull(message = "Invalid price value: address is NULL")
     private String address;
-    private int transaction;
-    private int paid;
-    private int remains;
 }

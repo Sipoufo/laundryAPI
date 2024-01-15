@@ -3,6 +3,7 @@ package com.STTFV.laundryAPI.controllers;
 
 import com.STTFV.laundryAPI.dto.requests.CustomerRequest;
 import com.STTFV.laundryAPI.dto.requests.ExpenseRequest;
+import com.STTFV.laundryAPI.dto.responses.DataResponse;
 import com.STTFV.laundryAPI.entities.Customer;
 import com.STTFV.laundryAPI.entities.Expense;
 import com.STTFV.laundryAPI.exceptions.ResourceNotFoundException;
@@ -15,6 +16,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +47,7 @@ public class ExpenseController {
     }
 
 
-    @GetMapping("")
+    @GetMapping("/{pageNumber}/{pageSize}")
     @Operation(summary = "Get the list of expenses", tags = "Expense")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Expenses fetched"),
@@ -53,14 +56,21 @@ public class ExpenseController {
             @ApiResponse(responseCode = "401", description = "User is not authenticated")
     })
 
-    private ResponseEntity<List<Expense>> getExpenses () {
-        List<Expense> expenses = expenseService.getAllExpense();
+    private ResponseEntity<DataResponse> getExpenses (@PathVariable("pageNumber") int pageNumber, @PathVariable("pageSize") int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        List<Expense> expenses = expenseService.getAllExpense(pageable);
+
+        DataResponse expensesResponse = DataResponse
+                .builder()
+                .data(expenses)
+                .pageable(pageable)
+                .build();
 
         if (expenses.isEmpty()) {
-            return new ResponseEntity<>(expenses, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(expensesResponse, HttpStatus.NO_CONTENT);
         }
         else {
-            return new ResponseEntity<>(expenses, HttpStatus.OK);
+            return new ResponseEntity<>(expensesResponse, HttpStatus.OK);
         }
     }
 

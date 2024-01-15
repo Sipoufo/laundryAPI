@@ -10,6 +10,7 @@ import com.STTFV.laundryAPI.repositories.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,8 +45,8 @@ public class ExpenseService {
         return expenseRepository.findById(expenseId);
     }
 
-    public List<Expense> getAllExpense() {
-        return expenseRepository.findAll();
+    public List<Expense> getAllExpense(Pageable pageable) {
+        return expenseRepository.findAll(pageable).getContent();
     }
 
     public  Expense updateExpense(ExpenseRequest expenseRequest, Long expenseId) {
